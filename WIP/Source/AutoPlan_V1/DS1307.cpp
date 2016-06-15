@@ -102,9 +102,9 @@ void DS1307_ReadTime(void)
       vU08_HoursMode = 12;
     }
     vU08_DayOfWeek = (uint8_t)Wire.read();
-    utmp16 = Wire.read();
-    utmp16 = Wire.read();
-    utmp16 = Wire.read();
+#if (SIM_DEBUG == ENABLE)
+    Serial.println(" Time \n");
+#endif
   }
   else
   {    
@@ -117,8 +117,8 @@ static void DS1307_SaveTime(void)
   /* Send the address 0x68 to connect DS1307 */
   Wire.beginTransmission(DS1307_ADD);
   Wire.write((byte) 0);
-  Wire.write(bin_2_bcd(18));
-  Wire.write(bin_2_bcd(25));
+  Wire.write(bin_2_bcd(22));
+  Wire.write(bin_2_bcd(40));
   Wire.write(bin_2_bcd(18));
   Wire.write(5);
   Wire.write((byte) 0);

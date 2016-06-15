@@ -23,7 +23,7 @@ struct  failsafe_data
   uint8_t NGCounter;           /* Timer count when NG judgement */
   uint8_t OKCounter;           /* Timer count when OK judgement */
 } ;
-#define NUMBER_FAILSAFE          2
+#define NUMBER_FAILSAFE          3
 extern struct failsafe_data FAILSAFE_DATA[NUMBER_FAILSAFE];
 
 #define TST_FAILSAFE(dgn) ((FAILSAFE_DATA[dgn].Abnormal)==(1))

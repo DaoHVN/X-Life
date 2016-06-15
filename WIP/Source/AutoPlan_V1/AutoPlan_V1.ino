@@ -3,6 +3,7 @@
 #include "CPU_Init.h"
 #include "OS.h"
 #include "RAM.h"
+#include "FLAG.h"
 
 #if ( (DISPLAY_CONTROL == ENABLE) && (DISPLAY_MODE == iNOKIA5110) )
 #include "LCD_5110.h"
@@ -35,6 +36,7 @@ void setup()
   Serial.println(vU08_ErrorCode);
 #endif
   Enable_Int();
+  fU08_UpdateRealTime = 1;
 }
 /*****************************************************************/
 /* Main function */
@@ -45,7 +47,7 @@ void loop()
   {
     /* Keyboard Scan */
 #if (KEYBOARD_CONTROL == ENABLE)
-    UpdateKeyBoard();
+    //UpdateKeyBoard();
 #endif
     /* Real Time Read */
 #if ((TIME_CONTROL == ENABLE) && (TIME_MODE == iDS1307))
@@ -53,11 +55,16 @@ void loop()
 #endif
     /* Error  Report */
 #if (FAILSAFE_CONTROL == ENABLE)
-    FailSafe_judgement();
+    //FailSafe_judgement();
 #endif
     /* Display to screen */
 #if (DISPLAY_CONTROL == ENABLE)
-    updateDisplay();  /* Process Display */
+    //updateDisplay();  /* Process Display */
+#endif
+#if (SIM_DEBUG == ENABLE)
+    Serial.print(vU08_Hours);
+    Serial.print(" Gio ");
+    Serial.println(vU08_Minutes);
 #endif
   }
 } 

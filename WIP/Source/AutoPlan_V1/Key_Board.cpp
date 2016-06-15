@@ -192,22 +192,30 @@ void KeyBoard_Soft_Init(void)
 #if iNUMKEY > 0
 ISR (PCINT0_vect) // handle pin change interrupt for D8 to D13 here
 {    
-  digitalWrite(13,digitalRead(8) and digitalRead(9));
+  if( (PINC & (1 << PINC0)) == 1 )
+    {
+        /* LOW to HIGH pin change */
+    }
+    else
+    {
+        /* HIGH to LOW pin change */
+    }
+    digitalWrite(11,(digitalRead(11)^1));
 }
 #elif iNUMKEY > 1
 ISR (PCINT1_vect) // handle pin change interrupt for A0 to A5 here
 {
-  digitalWrite(13,digitalRead(A0));
+  digitalWrite(11,(digitalRead(11)^1));
 }  
 #elif iNUMKEY > 2
 ISR (PCINT2_vect) // handle pin change interrupt for D0 to D7 here
 {
-  digitalWrite(13,digitalRead(7));
+  digitalWrite(11,(digitalRead(11)^1));
 }
 #elif iNUMKEY > 3
 ISR (PCINT3_vect) // handle pin change interrupt for D0 to D7 here
 {
-  digitalWrite(13,digitalRead(7));
+  digitalWrite(11,(digitalRead(11)^1));
 }
 #endif
 void KeyBoard_Hard_Init(void)
@@ -215,14 +223,12 @@ void KeyBoard_Hard_Init(void)
   /* Port C is input */
   DDRC &= ~(iBIT0 | iBIT1 | iBIT2 | iBIT3);
   /* Pull Up register */
-  digitalWrite(8,HIGH);
-  digitalWrite(9,HIGH);
-  digitalWrite(10,HIGH);
-  digitalWrite(11,HIGH);
-  attachInterrupt(8,PCINT0_vect,FALLING);
-  //attachInterrupt(9,PCINT1_vect,FALLING);
-  //attachInterrupt(10,PINC2_ISR,FALLING);
-  //attachInterrupt(11,PINC3_ISR,FALLING);
+  digitalWrite(A0,HIGH);
+  digitalWrite(A1,HIGH);
+  digitalWrite(A2,HIGH);
+  digitalWrite(A3,HIGH);
+  PCICR |= (1 << PCIE1);    /* set PCIE1 to enable PCMSK1 scan: Port C: PCINT8 ~ PCINT14 */
+  PCMSK1 |= (1 << PCINT8) | (1 << PCINT9) | (1 << PCINT10)| (1 << PCINT11);  /* set PCINT8~PCINT14 to trigger an interrupt on state change */
 }
 
 void UpdateKeyBoard(void)

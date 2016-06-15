@@ -112,7 +112,7 @@ static void Timer_Read_EEPROM_FailSafe(void)
           (timespend > TIMER_CTRL_SPENDTIME_MAX)    
           )
       {
-        FailSafe_NG_judgment(FAILSAFE_REAL_SAVETIME_READ);
+        FailSafe_NG_judgement(FAILSAFE_REAL_SAVETIME_READ);
       }
     }
   }
