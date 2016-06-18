@@ -66,7 +66,7 @@ void ReadPinKeySerial(void)
 void ReadPinKeyParalel(void)
 {
 #if iNUMKEY > 0
-  if(PINC0 == 0)
+  if(digitalRead(4) == 0)
   {
     vU08_BufferInKey[0] = KEY_ON;
   }
@@ -75,7 +75,7 @@ void ReadPinKeyParalel(void)
     vU08_BufferInKey[0] = KEY_OFF;
   }
 #elif iNUMKEY > 1
-  if(PINC1 == 0)
+  if(digitalRead(5) == 0)
   {
     vU08_BufferInKey[1] = KEY_ON;
   }
@@ -84,7 +84,7 @@ void ReadPinKeyParalel(void)
     vU08_BufferInKey[1] = KEY_OFF;
   }
 #elif iNUMKEY > 2
-  if(PINC2 == 0)
+  if(digitalRead(6) == 0)
   {
     vU08_BufferInKey[2] = KEY_ON;
   }
@@ -93,7 +93,7 @@ void ReadPinKeyParalel(void)
     vU08_BufferInKey[2] = KEY_OFF;
   }
 #elif iNUMKEY > 3
-  if(PINC3 == 0)
+  if(digitalRead(7) == 0)
   {
     vU08_BufferInKey[3] = KEY_ON;
   }
@@ -188,47 +188,14 @@ void KeyBoard_Soft_Init(void)
   EventFuncKey[23] = EVENT_KEY08_PRESS;
 #endif
 }
-/************************** PINTC8~13 Interrupts ******************/
-#if iNUMKEY > 0
-ISR (PCINT0_vect) // handle pin change interrupt for D8 to D13 here
-{    
-  if( (PINC & (1 << PINC0)) == 1 )
-    {
-        /* LOW to HIGH pin change */
-    }
-    else
-    {
-        /* HIGH to LOW pin change */
-    }
-    digitalWrite(11,(digitalRead(11)^1));
-}
-#elif iNUMKEY > 1
-ISR (PCINT1_vect) // handle pin change interrupt for A0 to A5 here
-{
-  digitalWrite(11,(digitalRead(11)^1));
-}  
-#elif iNUMKEY > 2
-ISR (PCINT2_vect) // handle pin change interrupt for D0 to D7 here
-{
-  digitalWrite(11,(digitalRead(11)^1));
-}
-#elif iNUMKEY > 3
-ISR (PCINT3_vect) // handle pin change interrupt for D0 to D7 here
-{
-  digitalWrite(11,(digitalRead(11)^1));
-}
-#endif
+
 void KeyBoard_Hard_Init(void)
 {
-  /* Port C is input */
-  DDRC &= ~(iBIT0 | iBIT1 | iBIT2 | iBIT3);
-  /* Pull Up register */
-  digitalWrite(A0,HIGH);
-  digitalWrite(A1,HIGH);
-  digitalWrite(A2,HIGH);
-  digitalWrite(A3,HIGH);
-  PCICR |= (1 << PCIE1);    /* set PCIE1 to enable PCMSK1 scan: Port C: PCINT8 ~ PCINT14 */
-  PCMSK1 |= (1 << PCINT8) | (1 << PCINT9) | (1 << PCINT10)| (1 << PCINT11);  /* set PCINT8~PCINT14 to trigger an interrupt on state change */
+  /* Port D is input */
+  pinMode(4,INPUT);
+  pinMode(5,INPUT);
+  pinMode(6,INPUT);
+  pinMode(7,INPUT);
 }
 
 void UpdateKeyBoard(void)
@@ -267,50 +234,49 @@ void KeyBoard_Cal(void)
                      
   for(i = 0;i < iNUMKEY;i ++)      /* @  : For Check noise of keyboard */
   {      
-                       
+    vU08_ShiftKey[i] = vU08_ShiftKey[i] << 1;                   
     if(vU08_BufferInKey[i] == KEY_ON)  
     {               
-      vU08_ShiftKey[i] = KEY_ON_VALUE;
+      vU08_ShiftKey[i] |= 0x01;
     }               
     else              
     {               
-      vU08_ShiftKey[i] = KEY_OFF_VALUE;
+      vU08_ShiftKey[i] |= 0x00;
     }               
-#if 1
-    if((vU08_ShiftKey[i] == KEY_ON_VALUE)&&(vU08_FlagKey[i] == KEY_OFF))  /*Key ON*/ 
+    /* Key ON */
+    if((vU08_ShiftKey[i] == KEY_ON_VALUE)&&(vU08_FlagKey[i] == KEY_OFF))   
     {
       vU08_EventKey[i] = EVT_KEY_ON;                        
       vU08_CounterKey[i] = TIME_KEY_REPEAT_FIRST;                       
-      vU08_FlagKey[i] = KEY_ON;        
-      digitalWrite(11,(digitalRead(11)^1));                   
+      vU08_FlagKey[i] = KEY_ON;              
+      digitalWrite(8,(digitalRead(8)^1));             
     }
-#endif    
-    if((vU08_ShiftKey[i] != KEY_ON_VALUE)&&(vU08_FlagKey[i] == KEY_ON))   /*Key OFF */ 
+    /* Key OFF */
+    if((vU08_ShiftKey[i] != KEY_ON_VALUE)&&(vU08_FlagKey[i] == KEY_ON))    
     {
       vU08_EventKey[i] = EVT_KEY_OFF;                       
       vU08_ShiftKey[i] = KEY_OFF_VALUE;                       
       vU08_CounterKey[i] = 0x00;                      
-      vU08_FlagKey[i] = KEY_OFF;      
-      digitalWrite(11,(digitalRead(11)^1));                       
+      vU08_FlagKey[i] = KEY_OFF;                          
     }
-    if((vU08_ShiftKey[i] == KEY_ON_VALUE)&&(vU08_CounterKey[i] > 0))    /*Key REPEAT*/ 
+    /* Key REPEAT */ 
+    if((vU08_ShiftKey[i] == KEY_ON_VALUE)&&(vU08_CounterKey[i] > 0))    
     {                                       
       vU08_CounterKey[i]--;                             
       if(vU08_CounterKey[i] == 0)                         
       {
         vU08_EventKey[i] = EVT_KEY_REPEAT;                    
         vU08_CounterKey[i] = TIME_KEY_REPEAT_SECOND;                    
-        vU08_FlagKey[i] = KEY_ON;        
-        digitalWrite(11,(digitalRead(11)^1));            
+        vU08_FlagKey[i] = KEY_ON;    
+        digitalWrite(11,(digitalRead(11)^1));              
       }
-    }
-                                            
-  }                              
+    }                               
+  }                             
 }
 #if iNUMKEY > 0
 void EVENT_KEY01_ON(void)
 {
-  digitalWrite(11,(digitalRead(11)^1));
+  
 }
 
 void EVENT_KEY01_OFF(void)
@@ -320,7 +286,7 @@ void EVENT_KEY01_OFF(void)
 
 void EVENT_KEY01_PRESS(void)
 {
-  digitalWrite(8,(digitalRead(8)^1));
+  
 }
 #elif iNUMKEY > 1
 void EVENT_KEY02_ON(void)

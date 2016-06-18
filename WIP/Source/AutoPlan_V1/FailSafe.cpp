@@ -12,7 +12,7 @@ static const  struct  failsafe_tbl FAILSAFE_TBL[NUMBER_FAILSAFE] =
       /*Code*/ /*Count*/
 /*0*/ {0x00,0x00},  /* FAILSAFE_EEPROM_INIT_READ */
 /*1*/ {0x01,0x0A},  /* FAILSAFE_REAL_TIME_READ */
-/*1*/ {0x02,0x00}   /* FAILSAFE_REAL_SAVETIME_READ */
+/*1*/ {0x02,0x00}   /* FAILSAFE_TIME_CTRL_READ_EEPROM */
 };
 
 struct failsafe_data FAILSAFE_DATA[NUMBER_FAILSAFE];

@@ -1,10 +1,6 @@
 #ifndef DS1307_H
 #define DS1307_H
 
-#include "PREDEFINE.h"
-
-#if ((TIME_CONTROL == ENABLE) && (TIME_MODE == iDS1307))
-
 #define DS1307_ADD            0x68
 #define DS1307_START_ADD      0x00
 #define DS1307_TIME_ADD       0x07
@@ -21,8 +17,6 @@
 extern void DS1307_Hard_Init(void);
 extern void DS1307_Soft_Init(void);
 extern void DS1307_ReadTime(void);
-
-#endif  /* ( (TIME_CONTROL == ENABLE) &&  (TIME_MODE == iDS1307) ) */
 
 #endif /* DS1307_H */
 

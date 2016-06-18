@@ -4,14 +4,14 @@
 
 #include "CPU_Init.h"
 
-#if TIME_CONTROL == ENABLE
-#if TIME_MODE == iDS1307
+#if (TIME_CONTROL == ENABLE)
+#if (TIME_MODE == iDS1307)
 #include "DS1307.h"
 #endif
 #endif
 
-#if WIFI_CONTROL == ENABLE
-#if WIFI_MODE == iESP8266
+#if (WIFI_CONTROL == ENABLE)
+#if (WIFI_MODE == iESP8266)
 #include "ESP8266.h"
 #endif
 #endif
@@ -49,15 +49,15 @@ void Hardware_init(void)
     Serial.begin(SIM_DEBUG_BAUDRATE);
 #endif
   /* Wifi control init */
-#if WIFI_CONTROL == ENABLE
-#if WIFI_MODE == iESP8266  
+#if (WIFI_CONTROL == ENABLE)
+#if (WIFI_MODE == iESP8266)
   ESP8266_Hard_Init();
 #endif
 #endif
   
   /* Real Time control init */
-#if TIME_CONTROL == ENABLE
-#if TIME_MODE == iDS1307
+#if (TIME_CONTROL == ENABLE)
+#if (TIME_MODE == iDS1307)
   DS1307_Hard_Init();
 #endif
 #endif
@@ -71,6 +71,7 @@ void Hardware_init(void)
 #if (KEYBOARD_CONTROL == ENABLE)
   KeyBoard_Hard_Init();
 #endif
+
 #if (SIM_DEBUG == ENABLE)
   Serial.println("HardWare Init Finish\n");
 #endif
@@ -83,15 +84,15 @@ void Hardware_init(void)
 void Software_init(void)
 {
   /* Real Time Init */
-#if TIME_CONTROL == ENABLE
-#if TIME_MODE == iDS1307
+#if (TIME_CONTROL == ENABLE)
+#if (TIME_MODE == iDS1307)
   DS1307_Soft_Init();
 #endif
 #endif
   
   /* Wifi Init */
-#if WIFI_CONTROL == ENABLE
-#if WIFI_MODE == iESP8266  
+#if (WIFI_CONTROL == ENABLE)
+#if (WIFI_MODE == iESP8266)  
   ESP8266_Soft_Init();
 #endif
 #endif

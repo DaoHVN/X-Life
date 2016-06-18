@@ -29,9 +29,9 @@ extern struct failsafe_data FAILSAFE_DATA[NUMBER_FAILSAFE];
 #define TST_FAILSAFE(dgn) ((FAILSAFE_DATA[dgn].Abnormal)==(1))
 
 /*** MACRO Diagnosis Define here ***/
-#define FAILSAFE_EEPROM_INIT_READ         0x00
-#define FAILSAFE_REAL_TIME_READ           0x01
-#define FAILSAFE_REAL_SAVETIME_READ       0x02
+#define FAILSAFE_EEPROM_INIT_READ         0x01
+#define FAILSAFE_REAL_TIME_READ           0x02
+#define FAILSAFE_TIME_CTRL_READ_EEPROM    0x03
 
 extern void FailSafe_NG_judgement(uint8_t dgn);
 extern void FailSafe_OK_judgement(uint8_t dgn);

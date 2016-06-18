@@ -30,8 +30,8 @@
 ////////////////////////////////////////
 
 /* Define time Repeat Key */
-#define TIME_KEY_REPEAT_FIRST   40    /* = 30 x 100ms Job */        
-#define TIME_KEY_REPEAT_SECOND  20    /* = 20 x 100ms Job */        
+#define TIME_KEY_REPEAT_FIRST   0xA0    /* = 30 x 100ms Job */        
+#define TIME_KEY_REPEAT_SECOND  0x20    /* = 20 x 100ms Job */        
 //////////////////////////////////////////////////////////
 
 // Define Key on, off Value
@@ -58,10 +58,7 @@
 
 /* Define Mode of keyboard */
 #define NORM_MODE         0
-#define TEMP_MODE         1
-#define TEMP_MODE_SETUP   2
-#define TIME_MODE         3
-#define TIME_MODE_SETUP   4
+
 ///////////////////////////////////////
 
 extern void KeyBoard_Soft_Init(void);

@@ -1,9 +1,11 @@
 #include <Wire.h>
-#include "DS1307.h"
 #include "RAM.h"
 #include "FLAG.h"
+#include "PREDEFINE.h"
 
 #if ((TIME_CONTROL == ENABLE) && (TIME_MODE == iDS1307))
+
+#include "DS1307.h"
 
 static void DS1307_SaveTime(void);
 
@@ -13,7 +15,7 @@ static void DS1307_SaveTime(void);
 /**************************************************************************************************/
 void DS1307_Hard_Init(void)
 {
-  DDRC |= (iBIT5 | iBIT4);
+  DDRC |= (iBIT5);
 	Wire.begin();
 }
 /************************************* DS1307_Soft_Init *******************************************/
@@ -77,7 +79,10 @@ static int bin_2_bcd(int temp)
 void DS1307_ReadTime(void)
 {
   uint16_t utmp16;
-  
+
+#if (SIM_DEBUG == ENABLE)
+    Serial.println(" Read Time \n");
+#endif
   if( !TSTBIT(fU08_UpdateRealTime) )
   {
     /* Send the address 0x68 to connect DS1307 */
@@ -102,13 +107,19 @@ void DS1307_ReadTime(void)
       vU08_HoursMode = 12;
     }
     vU08_DayOfWeek = (uint8_t)Wire.read();
+    utmp16 = Wire.read();
+    utmp16 = Wire.read();
+    utmp16 = Wire.read();
 #if (SIM_DEBUG == ENABLE)
-    Serial.println(" Time \n");
+    Serial.print(vU08_Hours);
+    Serial.print(" Gio ");
+    Serial.println(vU08_Minutes);
 #endif
   }
-  else
+  else  /* Save new Real Time */
   {    
     DS1307_SaveTime();
+    CLRBIT(fU08_UpdateRealTime);
   }      
 }
 
@@ -117,13 +128,12 @@ static void DS1307_SaveTime(void)
   /* Send the address 0x68 to connect DS1307 */
   Wire.beginTransmission(DS1307_ADD);
   Wire.write((byte) 0);
-  Wire.write(bin_2_bcd(22));
-  Wire.write(bin_2_bcd(40));
-  Wire.write(bin_2_bcd(18));
+  Wire.write(bin_2_bcd(23));  /* Sec */
+  Wire.write(bin_2_bcd(12));  /* Min */
+  Wire.write(bin_2_bcd(23));  /* Hour */
   Wire.write(5);
   Wire.write((byte) 0);
   Wire.endTransmission();
-  CLRBIT(fU08_UpdateRealTime);
 }
 
 #endif  /* ( (TIME_CONTROL == ENABLE) &&  (TIME_MODE == iDS1307) ) */

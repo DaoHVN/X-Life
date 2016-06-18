@@ -1,11 +1,11 @@
-#include "HEADER.h"
 #include "PREDEFINE.h"
+#include "HEADER.h"
 #include "CPU_Init.h"
 #include "OS.h"
 #include "RAM.h"
 #include "FLAG.h"
 
-#if ((DISPLAY_CONTROL == ENABLE) && (DISPLAY_MODE == iNOKIA5110))
+#if ( (DISPLAY_CONTROL == ENABLE) && (DISPLAY_MODE == iNOKIA5110) )
 #include "LCD_5110.h"
 #endif
 
@@ -23,43 +23,49 @@
 /*****************************************************************/
 /* Power On Initialize */
 /*****************************************************************/
-void setup() 
+void setup()
 {
-  /* Disable interrupts */
-  Disable_Int();
-  /* Register Init */
-  Hardware_init();
-  /* Global Variant initialize */
-  Software_init();
-  /* Enable all interrupts */
+	/* Disable interrupts */
+	Disable_Int();
+	/* Register Init */
+	Hardware_init();
+	/* Global Variant initialize */
+	Software_init();
+	/* Enable all interrupts */
 #if (SIM_DEBUG == ENABLE)
-  Serial.println(vU08_ErrorCode);
+	Serial.println(vU08_ErrorCode);
 #endif
-  Enable_Int();
+	Enable_Int();
 }
 /*****************************************************************/
 /* Main function */
 /*****************************************************************/
-void loop() 
+void loop()
 {
-  while(1)
-  {
-    /* Keyboard Scan */
+	while (1)
+	{
+		/* Keyboard Scan */
 #if (KEYBOARD_CONTROL == ENABLE)
-    //UpdateKeyBoard();
+		//UpdateKeyBoard();
 #endif
-    /* Real Time Read */
+		/* Real Time Read */
 #if ((TIME_CONTROL == ENABLE) && (TIME_MODE == iDS1307))
-    DS1307_ReadTime();
+		DS1307_ReadTime();
 #endif
-    /* Error  Report */
+		/* Error  Report */
 #if (FAILSAFE_CONTROL == ENABLE)
-    FailSafe_judgement();
+		//FailSafe_judgement();
 #endif
-    /* Display to screen */
+		/* Display to screen */
 #if (DISPLAY_CONTROL == ENABLE)
-    updateDisplay();  /* Process Display */
+		//updateDisplay();  /* Process Display */
 #endif
-  }
-} 
-
+#if (SIM_DEBUG == ENABLE)
+		Serial.print(vU08_Hours);
+		Serial.print(" Gio ");
+		Serial.println(vU08_Minutes);
+#endif
+		digitalWrite(8, (digitalRead(8) ^ 1));
+		delay(1000);
+	}
+}

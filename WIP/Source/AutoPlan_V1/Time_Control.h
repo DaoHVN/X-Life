@@ -42,7 +42,7 @@ extern uint8_t vU08_TimerData[TIMER_CTRL_TBL_MAX][sizeof(timectrl)/sizeof(uint8_
 
 
 extern void Timer_Control(void);
-
+extern void Timer_Control_Init(void);
 #endif  /* TIME_CONTROL == ENABLE */
 #endif  /* TIME_CONTROL_H */
 
