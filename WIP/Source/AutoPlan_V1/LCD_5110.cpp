@@ -433,7 +433,7 @@ void gotoXY(int x, int y)
 
 // This will actually draw on the display, whatever is currently
 // in the displayMap array.
-void updateDisplay()
+void UpdateDisplay()
 {
   gotoXY(0, 0);
   for (int i=0; i < (LCD_WIDTH * LCD_HEIGHT / 8); i++)
@@ -467,7 +467,7 @@ void invertDisplay()
   {
     displayMap[i] = ~displayMap[i] & 0xFF;
   }
-  updateDisplay();
+  UpdateDisplay();
 }
 
 //This sends the magical commands to the PCD8544

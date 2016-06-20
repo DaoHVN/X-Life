@@ -26,7 +26,7 @@ LED (backlight) pin should remain on a PWM-capable pin. */
 
 
 extern void LCD5110_Hard_Init(void);
-extern void updateDisplay(void);
+extern void UpdateDisplay(void);
 #endif  /* ( (DISPLAY_CONTROL == ENABLE) && (DISPLAY_MODE == iNOKIA5110) ) */
 
 #endif  /* LCD_5110_H */

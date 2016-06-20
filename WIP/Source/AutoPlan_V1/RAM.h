@@ -28,6 +28,9 @@ struct lst_glb
   uint8_t DayOfWeek;
 #endif
   uint8_t ErrorCode;
+#if (ADC_CONTROL == ENABLE)
+  uint16_t  ADCValue;
+#endif
 };
 extern struct lst_glb vList;
 /**************************************************************************/
@@ -38,8 +41,10 @@ extern struct lst_glb vList;
 #define vU08_HoursMode            vList.HoursMode
 #define vU08_DayOfWeek            vList.DayOfWeek
 #endif  /* (TIME_CONTROL == ENABLE) */
-
 #define vU08_ErrorCode            vList.ErrorCode
+#if (ADC_CONTROL == ENABLE)
+#define vU16_ADCValue             vList.ADCValue
+#endif
 
 #endif  /* RAM_H */
 

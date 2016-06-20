@@ -16,8 +16,12 @@
 #endif
 #endif
 
-#if ( (DISPLAY_CONTROL == ENABLE) && (DISPLAY_MODE == iNOKIA5110) )
+#if (DISPLAY_CONTROL == ENABLE)
+#if (DISPLAY_MODE == iNOKIA5110)
 #include "LCD_5110.h"
+#elif (DISPLAY_MODE == iLCD16X02)
+#include "LCD_1602.h"
+#endif
 #endif
 
 #if (KEYBOARD_CONTROL == ENABLE)
@@ -63,8 +67,12 @@ void Hardware_init(void)
 #endif
   
   /* Display init */
-#if ((DISPLAY_CONTROL == ENABLE) && (DISPLAY_MODE == iNOKIA5110))
+#if (DISPLAY_CONTROL == ENABLE)
+#if (DISPLAY_MODE == iNOKIA5110)  
   LCD5110_Hard_Init();
+#elif (DISPLAY_MODE == iLCD16X02)
+  LCD1602_Hard_Init();
+#endif
 #endif
   
   /* KeyBoard Init */

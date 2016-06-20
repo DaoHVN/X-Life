@@ -5,7 +5,7 @@
 #include "PREDEFINE.h"
 
 struct _flag_list{
-#if ((DISPLAY_CONTROL == ENABLE) && (DISPLAY_MODE == iNOKIA5110))
+#if (DISPLAY_CONTROL == ENABLE)
   uint8_t UpdateDisplay           :1;
 #endif
 #if ((TIME_CONTROL == ENABLE) && (TIME_MODE == iDS1307))
@@ -17,6 +17,7 @@ struct _flag_list{
 };
 extern struct _flag_list flag_list;
 /****************** define global flag dont need backup here ***********************************************/
+#define fU08_UpdateDisplay        flag_list.UpdateDisplay
 #define fU08_UpdateRealTime       flag_list.UpdateRealTime
 #define fU08_EEPROMInitNG         flag_list.EEPROMInitNG
 /***********************************************************************************************************/

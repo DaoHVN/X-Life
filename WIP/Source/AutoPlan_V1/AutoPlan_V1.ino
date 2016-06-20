@@ -5,8 +5,12 @@
 #include "RAM.h"
 #include "FLAG.h"
 
-#if ((DISPLAY_CONTROL == ENABLE) && (DISPLAY_MODE == iNOKIA5110))
+#if (DISPLAY_CONTROL == ENABLE)
+#if (DISPLAY_MODE == iNOKIA5110)
 #include "LCD_5110.h"
+#elif (DISPLAY_MODE == iLCD16X02)
+#include "LCD_1602.h"
+#endif
 #endif
 
 #if (KEYBOARD_CONTROL == ENABLE)
@@ -46,7 +50,7 @@ void loop()
   {
     /* Keyboard Scan */
 #if (KEYBOARD_CONTROL == ENABLE)
-    //UpdateKeyBoard();
+    UpdateKeyBoard();
 #endif
     /* Real Time Read */
 #if ((TIME_CONTROL == ENABLE) && (TIME_MODE == iDS1307))
@@ -58,7 +62,7 @@ void loop()
 #endif
     /* Display to screen */
 #if (DISPLAY_CONTROL == ENABLE)
-    updateDisplay();  /* Process Display */
+    Update_Display();
 #endif
   }
 } 

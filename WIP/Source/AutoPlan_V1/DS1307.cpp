@@ -81,7 +81,7 @@ void DS1307_ReadTime(void)
   uint16_t utmp16;
 
 #if (SIM_DEBUG == ENABLE)
-    Serial.println(" Read Time \n");
+    //Serial.println(" Read Time \n");
 #endif
   if( !TSTBIT(fU08_UpdateRealTime) )
   {
@@ -111,9 +111,9 @@ void DS1307_ReadTime(void)
     utmp16 = Wire.read();
     utmp16 = Wire.read();
 #if (SIM_DEBUG == ENABLE)
-    Serial.print(vU08_Hours);
-    Serial.print(" Gio ");
-    Serial.println(vU08_Minutes);
+    //Serial.print(vU08_Hours);
+    //Serial.print(" Gio ");
+    //Serial.println(vU08_Minutes);
 #endif
   }
   else  /* Save new Real Time */
@@ -129,8 +129,8 @@ static void DS1307_SaveTime(void)
   Wire.beginTransmission(DS1307_ADD);
   Wire.write((byte) 0);
   Wire.write(bin_2_bcd(23));  /* Sec */
-  Wire.write(bin_2_bcd(12));  /* Min */
-  Wire.write(bin_2_bcd(23));  /* Hour */
+  Wire.write(bin_2_bcd(25));  /* Min */
+  Wire.write(bin_2_bcd(13));  /* Hour */
   Wire.write(5);
   Wire.write((byte) 0);
   Wire.endTransmission();

@@ -12,14 +12,17 @@
 
 #if (KEYBOARD_CONTROL == ENABLE)
 
-pEventFunc EventFuncKey[iNUMKEY*3];
+#define P_EVENT     0
 
-uint8_t vU08_ShiftKey[iNUMKEY];
-uint8_t vU08_FlagKey[iNUMKEY];
-uint8_t vU08_CounterKey[iNUMKEY];
-uint8_t vU08_EventKey[iNUMKEY];
-uint8_t vU08_RepeatKey[iNUMKEY];
-uint8_t vU08_BufferInKey[iNUMKEY];
+#if P_EVENT != 0
+pEventFunc EventFuncKey[iNUMKEY*3];
+#endif
+
+static uint8_t vU08_ShiftKey[iNUMKEY];
+static uint8_t vU08_FlagKey[iNUMKEY];
+static uint8_t vU08_CounterKey[iNUMKEY];
+static uint8_t vU08_EventKey[iNUMKEY];
+static uint8_t vU08_BufferInKey[iNUMKEY];
 
 
 /* Key press function */
@@ -149,11 +152,11 @@ void KeyBoard_Soft_Init(void)
   {
     vU08_ShiftKey[i]   = KEY_OFF_VALUE;
     vU08_FlagKey[i]    = KEY_OFF;
-    vU08_CounterKey[i]   = 0x00;
+    vU08_CounterKey[i]   = TIME_KEY_REPEAT_FIRST;
     vU08_EventKey[i]   = EVT_KEY_NO;
-    vU08_RepeatKey[i]  = FALSE;
     vU08_BufferInKey[i] = 0x00;
   }
+#if P_EVENT != 0
 #if iNUMKEY > 0
   EventFuncKey[0]  = EVENT_KEY01_ON;  
   EventFuncKey[1]  = EVENT_KEY01_OFF; 
@@ -187,6 +190,7 @@ void KeyBoard_Soft_Init(void)
   EventFuncKey[22] = EVENT_KEY08_OFF; 
   EventFuncKey[23] = EVENT_KEY08_PRESS;
 #endif
+#endif  /* #if P_EVENT != 0 */
 }
 
 void KeyBoard_Hard_Init(void)
@@ -206,12 +210,79 @@ void UpdateKeyBoard(void)
   {
     if(vU08_EventKey[i] < EVT_KEY_NO)
     {
-      utmp8 = i*3 + vU08_EventKey[i];
+#if iNUMKEY > 0
+      if (i == 0)
+      {
+        if (vU08_EventKey[i] == EVT_KEY_ON)
+        {
+          EVENT_KEY01_ON();
+        }
+        else if (vU08_EventKey[i] == EVT_KEY_OFF)
+        {
+          EVENT_KEY01_OFF();
+        }
+        else  /* key press */
+        {
+          EVENT_KEY01_PRESS();
+        }
+      }
+#elif iNUMKEY > 1      
+      else if (i == 1)
+      {
+        if (vU08_EventKey[i] == EVT_KEY_ON)
+        {
+          EVENT_KEY02_ON();
+        }
+        else if (vU08_EventKey[i] == EVT_KEY_OFF)
+        {
+          EVENT_KEY02_OFF();
+        }
+        else  /* key press */
+        {
+          EVENT_KEY02_PRESS();
+        }               
+      }
+#elif iNUMKEY > 2       
+      else if (i == 2)
+      {
+        if (vU08_EventKey[i] == EVT_KEY_ON)
+        {
+          EVENT_KEY03_ON();
+        }
+        else if (vU08_EventKey[i] == EVT_KEY_OFF)
+        {
+          EVENT_KEY03_OFF();
+        }
+        else  /* key press */
+        {
+          EVENT_KEY03_PRESS();
+        }               
+      }
+#elif iNUMKEY > 3       
+      else
+      {
+        if (vU08_EventKey[i] == EVT_KEY_ON)
+        {
+          EVENT_KEY04_ON();
+        }
+        else if (vU08_EventKey[i] == EVT_KEY_OFF)
+        {
+          EVENT_KEY04_OFF();
+        }
+        else  /* key press */
+        {
+          EVENT_KEY04_PRESS();
+        }         
+      }
+#endif      
+#if P_EVENT != 0
+      utmp8 = (uint8_t)(i*3 + vU08_EventKey[i]);
       if(utmp8 < (iNUMKEY*3))
       {
-        EventFuncKey[utmp8]();
+        //EventFuncKey[utmp8]();
       }
       vU08_EventKey[i] = EVT_KEY_NO;
+#endif
     }
   }
 }
@@ -243,32 +314,32 @@ void KeyBoard_Cal(void)
     {               
       vU08_ShiftKey[i] |= 0x00;
     }               
-    /* Key ON */
-    if((vU08_ShiftKey[i] == KEY_ON_VALUE)&&(vU08_FlagKey[i] == KEY_OFF))   
+    /* Key OFF -> ON */
+    if(((vU08_ShiftKey[i]&KEY_ON_VALUE) == KEY_ON_VALUE) && (vU08_FlagKey[i] == KEY_OFF))   
     {
       vU08_EventKey[i] = EVT_KEY_ON;                        
       vU08_CounterKey[i] = TIME_KEY_REPEAT_FIRST;                       
       vU08_FlagKey[i] = KEY_ON;              
-      digitalWrite(8,(digitalRead(8)^1));             
     }
-    /* Key OFF */
-    if((vU08_ShiftKey[i] != KEY_ON_VALUE)&&(vU08_FlagKey[i] == KEY_ON))    
+    /* Key ON -> OFF */
+    if(((vU08_ShiftKey[i]&KEY_ON_VALUE) != KEY_ON_VALUE) && (vU08_FlagKey[i] == KEY_ON))    
     {
       vU08_EventKey[i] = EVT_KEY_OFF;                       
       vU08_ShiftKey[i] = KEY_OFF_VALUE;                       
-      vU08_CounterKey[i] = 0x00;                      
       vU08_FlagKey[i] = KEY_OFF;                          
     }
-    /* Key REPEAT */ 
-    if((vU08_ShiftKey[i] == KEY_ON_VALUE)&&(vU08_CounterKey[i] > 0))    
-    {                                       
-      vU08_CounterKey[i]--;                             
+    /* Key PRESS */ 
+    if(((vU08_ShiftKey[i]&KEY_ON_VALUE) == KEY_ON_VALUE) && (vU08_CounterKey[i] > 0))    
+    {                  
+      if (vU08_CounterKey[i] > 0)
+      {
+        vU08_CounterKey[i]--;                       
+      }
       if(vU08_CounterKey[i] == 0)                         
       {
         vU08_EventKey[i] = EVT_KEY_REPEAT;                    
         vU08_CounterKey[i] = TIME_KEY_REPEAT_SECOND;                    
-        vU08_FlagKey[i] = KEY_ON;    
-        digitalWrite(11,(digitalRead(11)^1));              
+        vU08_FlagKey[i] = KEY_ON;             
       }
     }                               
   }                             
@@ -301,7 +372,7 @@ void EVENT_KEY02_OFF(void)
 
 void EVENT_KEY02_PRESS(void)
 {
-
+  
 }
 #elif iNUMKEY > 2
 void EVENT_KEY03_ON(void)
@@ -331,7 +402,7 @@ void EVENT_KEY04_OFF(void)
 
 void EVENT_KEY04_PRESS(void)
 {
-
+  
 }
 #elif iNUMKEY > 4
 void EVENT_KEY05_ON(void)

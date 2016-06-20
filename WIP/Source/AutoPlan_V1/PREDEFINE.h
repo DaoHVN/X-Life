@@ -17,6 +17,9 @@
 /* Fail Safe control */
 #define FAILSAFE_CONTROL        ENABLE
 
+/* Analog control */
+#define ADC_CONTROL             ENABLE
+
 /* Real time control */
 #define TIME_CONTROL            ENABLE
 #define iDS1307                 1
@@ -32,13 +35,13 @@
 #define WIFI_MODE               iESP8266
 
 /* Display Control */
-#define DISPLAY_CONTROL         DISABLE
+#define DISPLAY_CONTROL         ENABLE
 #define iNOKIA5110              1
 #define iLCD16X02               2
 #define iLCD16X04               3
 #define iLCD20X02               4
 #define iLCD20X04               5
-#define DISPLAY_MODE            iNOKIA5110
+#define DISPLAY_MODE            iLCD16X02
 
 /* Temporate Control */
 #define TEMP_CONTROL            DISABLE

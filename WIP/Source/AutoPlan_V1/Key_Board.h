@@ -30,12 +30,12 @@
 ////////////////////////////////////////
 
 /* Define time Repeat Key */
-#define TIME_KEY_REPEAT_FIRST   0xA0    /* = 30 x 100ms Job */        
-#define TIME_KEY_REPEAT_SECOND  0x20    /* = 20 x 100ms Job */        
+#define TIME_KEY_REPEAT_FIRST   0x1E    /* = 30 x 100ms Job */        
+#define TIME_KEY_REPEAT_SECOND  0x0A    /* = 10 x 100ms Job */        
 //////////////////////////////////////////////////////////
 
 // Define Key on, off Value
-#define KEY_ON_VALUE      0xFF                 
+#define KEY_ON_VALUE      0x03                 
 #define KEY_OFF_VALUE     0x00                 
 
 // Define Index of Keys                              
