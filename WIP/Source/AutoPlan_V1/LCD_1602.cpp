@@ -22,7 +22,7 @@ inline size_t LiquidCrystal_I2C::write(uint8_t value) {
 	return 0;
 }
 
-LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x50 for a 16 chars and 2 line display
+LiquidCrystal_I2C lcd(0x50,16,2);  // set the LCD address to 0x50 for a 16 chars and 2 line display
 
 
 // When the display powers up, it is configured as follows:
@@ -317,7 +317,6 @@ void LCD1602_Hard_Init(void)
   lcd.init();                      // initialize the lcd 
   lcd.backlight();
   lcd.print("Init...");
-  lcd.setcousor
 }
 void Update_Display(void)
 {

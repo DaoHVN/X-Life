@@ -9,6 +9,7 @@
 #define ANALOG_PIN_1            0
 
 extern void ADC_Hard_Init(void);
+extern void ADC_Soft_Init(void);
 extern void ADC_Control(void);
 #endif  /* (ADC_CONTROL == ENABLE) */
 

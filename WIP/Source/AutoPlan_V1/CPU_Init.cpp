@@ -32,6 +32,10 @@
 #include "EEPROM_Control.h"
 #endif
 
+#if (ADC_CONTROL == ENABLE)
+#include "ADC.h"
+#endif
+
 void Timer_Init(void);
 
 void IO_init(void);
@@ -71,13 +75,17 @@ void Hardware_init(void)
 #if (DISPLAY_MODE == iNOKIA5110)  
   LCD5110_Hard_Init();
 #elif (DISPLAY_MODE == iLCD16X02)
-  LCD1602_Hard_Init();
+  //LCD1602_Hard_Init();
 #endif
 #endif
   
   /* KeyBoard Init */
 #if (KEYBOARD_CONTROL == ENABLE)
   KeyBoard_Hard_Init();
+#endif
+
+#if (ADC_CONTROL == ENABLE)
+  ADC_Hard_Init();
 #endif
 
 #if (SIM_DEBUG == ENABLE)
@@ -112,6 +120,10 @@ void Software_init(void)
 
 #if (EEPROM_CONTROL == ENABLE)
   EEPROM_Read_Init();
+#endif
+
+#if (ADC_CONTROL == ENABLE)
+  ADC_Soft_Init();
 #endif
 
 #if (SIM_DEBUG == ENABLE)

@@ -14,12 +14,16 @@ struct _flag_list{
 #if (EEPROM_CONTROL == ENABLE)
   uint8_t EEPROMInitNG              :1;
 #endif
+#if (ADC_CONTROL == ENABLE)
+  uint8_t ADCStartConvert           :1;
+#endif
 };
 extern struct _flag_list flag_list;
 /****************** define global flag dont need backup here ***********************************************/
 #define fU08_UpdateDisplay        flag_list.UpdateDisplay
 #define fU08_UpdateRealTime       flag_list.UpdateRealTime
 #define fU08_EEPROMInitNG         flag_list.EEPROMInitNG
+#define fU08_ADCStartConvert      flag_list.ADCStartConvert
 /***********************************************************************************************************/
 
 struct _flag_list_z{
